@@ -22,7 +22,7 @@ con tono académico y máximo 200 palabras.
 
 **Figura 1.** Respuesta de `llama3.2:3b` al prompt 1.
 
-Llama estructuró la respuesta en cuatro párrafos diferenciados, uno por concepto. Mantuvo tono académico y respetó el límite de palabras. El español fue correcto y fluido.
+Estructuró la respuesta en cuatro párrafos diferenciados, uno por concepto. Mantuvo tono académico y respetó el límite de palabras. El español fue correcto y fluido.
 
 ---
 
@@ -32,7 +32,7 @@ Llama estructuró la respuesta en cuatro párrafos diferenciados, uno por concep
 
 **Figura 2.** Respuesta de `phi3.5:latest` al prompt 1.
 
-Phi respondió en un solo bloque continuo e indicó explícitamente el conteo de palabras al final: 198. Su redacción fue más densa y técnica que la de llama, aunque igualmente coherente.
+Respondió en un solo bloque continuo e indicó el conteo de palabras al final: 198. Su redacción fue más densa y técnica, aunque igualmente coherente. Fue el único que acusó recibo explícito del límite de palabras.
 
 ---
 
@@ -42,33 +42,37 @@ Phi respondió en un solo bloque continuo e indicó explícitamente el conteo de
 
 **Figura 3.** Respuesta de `gemma3:4b` al prompt 1.
 
-Gemma estructuró la respuesta con párrafos por concepto. Fue el más conciso de los tres, con frases breves y directas. Su tono fue más divulgativo que académico, aunque perfectamente comprensible.
+Estructuró la respuesta con párrafos por concepto. Fue el más conciso, con frases breves y directas. Su tono fue más divulgativo que académico, aunque perfectamente comprensible.
 
 ---
 
-## Modelo 4 — *(completar por el equipo)*
+## qwen2.5:7b
 
-> Agrega aquí la captura de pantalla del modelo 4 con el siguiente formato:
->
-> ```md
-> ![Respuesta de NOMBRE_MODELO al prompt 1](assets/img/practica1/NOMBRE_MODELO_p1.png)
-> ```
->
-> Debajo de la imagen escribe una observación breve sobre la respuesta: estructura, idioma, extensión y calidad general.
+![Respuesta de qwen2.5:7b al prompt 1](assets/img/practica1/qwen1.jpeg)
+
+**Figura 4.** Respuesta de `qwen2.5:7b` al prompt 1.
+
+Respondió en cuatro párrafos fluidos con buena progresión conceptual: de IA a ML, luego a IA generativa y finalmente a LLM. El español fue natural. Usó las abreviaturas AL (aprendizaje automático) y AG (aprendizaje generativo) de forma consistente. No excedió el límite de palabras solicitado.
 
 ---
 
-## Modelo 5 — *(completar por el equipo)*
+## mistral:7b
 
-> Agrega aquí la captura de pantalla del modelo 5 con el mismo formato.
-> Incluye una observación breve sobre la respuesta.
+![Respuesta de mistral:7b al prompt 1](assets/img/practica1/mistral1.jpeg)
+
+**Figura 5.** Respuesta de `mistral:7b` al prompt 1.
+
+Respondió con dos párrafos bien estructurados. Fue el más conciso de los modelos de 7B, pero también el más preciso en la relación jerárquica entre conceptos. Mencionó explícitamente el aprendizaje profundo como parte de la cadena. El español fue correcto, con uso de las siglas en inglés (ML) debidamente aclaradas.
 
 ---
 
-## Modelo 6 — *(completar por el equipo)*
+## tinyllama:1.1b-chat-v1-q8_0
 
-> Agrega aquí la captura de pantalla del modelo 6 con el mismo formato.
-> Incluye una observación breve sobre la respuesta.
+![Respuesta de tinyllama al prompt 1](assets/img/practica1/tiny1.jpeg)
+
+**Figura 6.** Respuesta de `tinyllama:1.1b-chat-v1-q8_0` al prompt 1.
+
+Fue el modelo con la respuesta más larga y menos precisa. Respondió en español pero mezcló conceptos incorrectamente: confundió IA generativa con investigación académica y definió LLM de forma imprecisa. Generó contenido redundante y superó el límite de 200 palabras. Es el ejemplo más claro de las limitaciones de los modelos de 1B parámetros para tareas de precisión conceptual.
 
 ---
 
