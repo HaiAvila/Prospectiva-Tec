@@ -4,21 +4,53 @@ title: Inicio
 nav_order: 1
 ---
 
-# Plantilla de documentación con Just the Docs
+# Práctica 1 — Instalación, ejecución y comparación de modelos LLM locales
 
-Este repositorio está diseñado para entender como utilizar la plantilla de repositorio que utiliza **"Just the docs"** de Jekyll y el lenguaje **"Markdown"**:
+Esta práctica corresponde a la asignatura **Prospectiva de la Tecnología** (IE127), impartida en la Universidad Iberoamericana Ciudad de México durante el verano 2026.
 
-1. **Crear y publicar** el sitio en GitHub Pages.
-2. Aprender la **estructura** típica de un repo de documentación.
-3. Dominar **Markdown** (texto, listas, tablas, código).
-4. Configurar la **navegación** (sidebar, secciones, orden).
-5. Agregar **imágenes, videos** y otros recursos.
-6. Ajustar **estilos** (logo, colores, footer).
+El objetivo es instalar Ollama, ejecutar al menos seis modelos LLM locales con los mismos prompts, comparar su desempeño y documentar los hallazgos.
 
+---
 
-Contenido:
-- [1. Publicar en GitHub Pages](01-publicar-en-github-pages.md)
-- [2. Estructura del repositorio](02-estructura-del-repo.md)
-- [3. Escribir en Markdown](03-markdown.md)
-- [4. Personalización visual](04-estilos.md)
+## Contenido
+
+- [Prompt 1 — Explicación conceptual](prompt-01.md)
+- [Prompt 2 — Embeddings](prompt-02.md)
+- [Prompt 3 — Evaluación crítica](prompt-03.md)
+- [Prompt 4 — Uso técnico](prompt-04.md)
+- [Tabla comparativa de modelos](tabla-comparativa.md)
+- [Reflexión](reflexion.md)
+
+---
+
+## Modelos utilizados
+
+Los modelos se descargaron e instalaron con Ollama:
+
+```
+ollama pull llama3.2:3b
+ollama pull gemma3:4b
+ollama pull phi3.5:latest
+```
+
+Los tres modelos adicionales serán documentados por el equipo.
+
+---
+
+## Instalación y verificación
+
+Una vez descargados los modelos, se verificó la instalación con `ollama ls`:
+
+![Salida de ollama ls con los modelos instalados](assets/img/practica1/ollama_ls.png)
+
+**Figura 1.** Salida de `ollama ls` mostrando los modelos descargados, sus identificadores y tamaño en disco.
+
+| Modelo          | ID            | Tamaño en disco |
+| --------------- | ------------- | --------------- |
+| `gemma3:4b`     | a2af6cc3eb7f  | 3.3 GB          |
+| `llama3.2:3b`   | a80c4f17acd5  | 2.0 GB          |
+| `phi3.5:latest` | 61819fb370a3  | 2.2 GB          |
+| *(modelo 4)*    | —             | —               |
+| *(modelo 5)*    | —             | —               |
+| *(modelo 6)*    | —             | —               |
 
