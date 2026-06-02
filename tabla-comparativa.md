@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Tabla comparativa
-nav_order: 6
+parent: Práctica 1
+nav_order: 5
 ---
 
 # Tabla comparativa de modelos
@@ -23,12 +24,8 @@ Los datos se obtuvieron de las model cards en Hugging Face, la biblioteca de Oll
 
 ## Notas sobre los datos
 
-**Licencias:** Gemma y Llama usan licencias propietarias de sus fabricantes que restringen redistribución y uso comercial sin autorización. Qwen, Mistral y TinyLlama usan Apache 2.0, y Phi-3.5 usa MIT — ambas permisivas para uso académico y comercial.
+**Licencias:** Gemma y Llama usan licencias propietarias que restringen redistribución y uso comercial sin autorización. Qwen, Mistral y TinyLlama usan Apache 2.0, y Phi-3.5 usa MIT — ambas permisivas para uso académico y comercial.
 
-**Tamaños en Ollama:** Los tamaños de qwen2.5:7b (4.7 GB) y mistral:7b (4.1 GB) se obtuvieron de la captura de `ollama pull` de cada modelo. El tamaño de `mistral:7b` en Ollama corresponde a la variante cuantizada por defecto descargada con ese comando.
+**Tamaños en Ollama:** Los tamaños de `qwen2.5:7b` (4.7 GB) y `mistral:7b` (4.1 GB) se obtuvieron de la captura de `ollama pull` de cada modelo.
 
 **TinyLlama:** La variante `1.1b-chat-v1-q8_0` es una cuantización Q8_0 del modelo base de 1.1B parámetros. Pesa 1.2 GB según la biblioteca de Ollama.
-
----
-
-[← Prompt 4](prompt-04.md) | [Reflexión →](reflexion.md)

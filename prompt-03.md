@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Prompt 3 — Evaluación crítica
-nav_order: 4
+parent: Práctica 1
+nav_order: 3
 ---
 
 # Prompt 3 — Evaluación crítica
@@ -41,7 +42,7 @@ Identificó: información errónea como válida, confirmación sesgada, y pérdi
 
 **Figura 19.** Respuesta de `gemma3:4b` al prompt 3.
 
-Identificó: propagación de información falsa (alucinaciones), plagio inadvertido, y dependencia excesiva. Sus ejemplos incluyeron casos históricos específicos (Robespierre, economía keynesiana, Shakespeare). Al final ofreció continuar la conversación, mostrando un comportamiento más conversacional que los demás modelos.
+Identificó: propagación de información falsa (alucinaciones), plagio inadvertido, y dependencia excesiva. Sus ejemplos incluyeron casos históricos específicos. Al final ofreció continuar la conversación, mostrando un comportamiento más conversacional que los demás modelos.
 
 ---
 
@@ -51,7 +52,7 @@ Identificó: propagación de información falsa (alucinaciones), plagio inadvert
 
 **Figura 20.** Respuesta de `qwen2.5:7b` al prompt 3.
 
-Identificó: plagio, contenido inexacto o desactualizado, y falta de contexto y profundidad. La respuesta fue clara y bien organizada con encabezados por riesgo. Destacó que los LLM pueden tener datos desactualizados, un matiz que otros modelos no señalaron explícitamente. Incluyó una conclusión que refuerza la necesidad de verificación.
+Identificó: plagio, contenido inexacto o desactualizado, y falta de contexto y profundidad. Fue el único que destacó el riesgo de datos desactualizados como problema independiente. Incluyó una conclusión que refuerza la necesidad de verificación.
 
 ---
 
@@ -61,7 +62,7 @@ Identificó: plagio, contenido inexacto o desactualizado, y falta de contexto y 
 
 **Figura 21.** Respuesta de `mistral:7b` al prompt 3.
 
-Identificó: error en la interpretación de datos, plagio, y falta de originalidad. Fue el único que mencionó la falta de originalidad como riesgo académico independiente, separándolo del plagio. Sus ejemplos fueron concisos pero precisos. La respuesta fue la más compacta entre los modelos de 7B.
+Identificó: error en la interpretación de datos, plagio, y falta de originalidad. Fue el único que separó la falta de originalidad como riesgo independiente del plagio. Sus ejemplos fueron concisos pero precisos.
 
 ---
 
@@ -71,8 +72,4 @@ Identificó: error en la interpretación de datos, plagio, y falta de originalid
 
 **Figura 22.** Respuesta de `tinyllama:1.1b-chat-v1-q8_0` al prompt 3.
 
-No respondió correctamente al prompt. En lugar de mencionar riesgos de usar LLM sin verificar fuentes, respondió sobre diferencias entre IA y aprendizaje automático, y sobre beneficios de los LLM en ciencias sociales. La respuesta no tiene relación con la pregunta formulada. Es el ejemplo más evidente de alucinación temática: el modelo generó texto fluido pero completamente fuera de tema.
-
----
-
-[← Prompt 2](prompt-02.md) | [Prompt 4 →](prompt-04.md)
+No respondió correctamente al prompt. En lugar de mencionar riesgos de usar LLM sin verificar fuentes, respondió sobre diferencias entre IA y aprendizaje automático. Es el ejemplo más evidente de alucinación temática: texto fluido pero completamente fuera de tema.

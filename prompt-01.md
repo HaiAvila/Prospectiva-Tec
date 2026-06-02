@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Prompt 1 — Explicación conceptual
-nav_order: 2
+parent: Práctica 1
+nav_order: 1
 ---
 
 # Prompt 1 — Explicación conceptual
@@ -52,7 +53,7 @@ Estructuró la respuesta con párrafos por concepto. Fue el más conciso, con fr
 
 **Figura 4.** Respuesta de `qwen2.5:7b` al prompt 1.
 
-Respondió en cuatro párrafos fluidos con buena progresión conceptual: de IA a ML, luego a IA generativa y finalmente a LLM. El español fue natural. Usó las abreviaturas AL (aprendizaje automático) y AG (aprendizaje generativo) de forma consistente. No excedió el límite de palabras solicitado.
+Respondió en cuatro párrafos fluidos con buena progresión conceptual. El español fue natural. Usó las abreviaturas AL y AG de forma consistente. No excedió el límite de palabras solicitado.
 
 ---
 
@@ -62,7 +63,7 @@ Respondió en cuatro párrafos fluidos con buena progresión conceptual: de IA a
 
 **Figura 5.** Respuesta de `mistral:7b` al prompt 1.
 
-Respondió con dos párrafos bien estructurados. Fue el más conciso de los modelos de 7B, pero también el más preciso en la relación jerárquica entre conceptos. Mencionó explícitamente el aprendizaje profundo como parte de la cadena. El español fue correcto, con uso de las siglas en inglés (ML) debidamente aclaradas.
+Respondió con dos párrafos bien estructurados. Fue el más conciso de los modelos de 7B pero también el más preciso en la relación jerárquica entre conceptos. Mencionó el aprendizaje profundo como parte de la cadena. El español fue correcto con las siglas en inglés debidamente aclaradas.
 
 ---
 
@@ -72,8 +73,4 @@ Respondió con dos párrafos bien estructurados. Fue el más conciso de los mode
 
 **Figura 6.** Respuesta de `tinyllama:1.1b-chat-v1-q8_0` al prompt 1.
 
-Fue el modelo con la respuesta más larga y menos precisa. Respondió en español pero mezcló conceptos incorrectamente: confundió IA generativa con investigación académica y definió LLM de forma imprecisa. Generó contenido redundante y superó el límite de 200 palabras. Es el ejemplo más claro de las limitaciones de los modelos de 1B parámetros para tareas de precisión conceptual.
-
----
-
-[← Inicio](index.md) | [Prompt 2 →](prompt-02.md)
+Fue el modelo con la respuesta más larga y menos precisa. Respondió en español pero mezcló conceptos incorrectamente y superó el límite de 200 palabras. Es el ejemplo más claro de las limitaciones de los modelos de 1B parámetros para tareas de precisión conceptual.

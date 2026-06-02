@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Prompt 2 — Embeddings
-nav_order: 3
+parent: Práctica 1
+nav_order: 2
 ---
 
 # Prompt 2 — Embeddings
@@ -35,7 +36,7 @@ Respondió con cuatro pasos estructurados (preprocesamiento, creación de embedd
 
 **Figuras 9 y 10.** Respuesta de `phi3.5:latest` al prompt 2.
 
-Ofreció un ejemplo más completo usando `gensim` y `Word2Vec`. Incluyó representación vectorial de documentos, cálculo de similitud coseno y recuperación del documento más relevante. Su código fue el más detallado entre los modelos de 3–4B.
+Ofreció un ejemplo más completo usando `gensim` y `Word2Vec`. Incluyó representación vectorial de documentos, cálculo de similitud coseno y recuperación del documento más relevante.
 
 ---
 
@@ -49,7 +50,7 @@ Ofreció un ejemplo más completo usando `gensim` y `Word2Vec`. Incluyó represe
 
 **Figuras 11, 12 y 13.** Respuesta de `gemma3:4b` al prompt 2.
 
-Fue el más detallado de los modelos de 4B. Explicó el proceso en cuatro etapas e incluyó código con `sentence-transformers` y `faiss`, mencionando herramientas de nivel de producción como Faiss o Annoy.
+Fue el más detallado de los modelos de 4B. Explicó el proceso en cuatro etapas e incluyó código con `sentence-transformers` y `faiss`, mencionando herramientas de nivel de producción.
 
 ---
 
@@ -59,7 +60,7 @@ Fue el más detallado de los modelos de 4B. Explicó el proceso en cuatro etapas
 
 **Figura 14.** Respuesta de `qwen2.5:7b` al prompt 2.
 
-Respondió con cuatro pasos bien diferenciados y código en Python usando `gensim` y `Word2Vec`. Fue claro en la explicación del cálculo de similitud coseno e incluyó el ranking de documentos. Su respuesta fue comparable en calidad a la de phi pero con mejor organización visual del texto.
+Respondió con cuatro pasos bien diferenciados y código en Python usando `gensim` y `Word2Vec`. Fue claro en la explicación del cálculo de similitud coseno e incluyó el ranking de documentos.
 
 ---
 
@@ -69,7 +70,7 @@ Respondió con cuatro pasos bien diferenciados y código en Python usando `gensi
 
 **Figura 15.** Respuesta de `mistral:7b` al prompt 2.
 
-Respondió sin código, con una explicación conceptual en prosa. Describió correctamente el proceso de embeddings y similitud, pero no incluyó un ejemplo práctico implementable. Fue el más conciso en este prompt, priorizando la comprensión sobre la implementación.
+Respondió sin código, con una explicación conceptual en prosa. Describió correctamente el proceso pero no incluyó un ejemplo práctico implementable. Fue el más conciso en este prompt.
 
 ---
 
@@ -79,8 +80,4 @@ Respondió sin código, con una explicación conceptual en prosa. Describió cor
 
 **Figura 16.** Respuesta de `tinyllama:1.1b-chat-v1-q8_0` al prompt 2.
 
-Respondió con un ejemplo muy breve usando el repositorio de Princeton como referencia. La respuesta fue superficial: no explicó el proceso de generación de embeddings ni incluyó código. Fabricó un enlace de imagen (alucinación) que no existe. Evidencia clara de las limitaciones de los modelos de 1B para tareas que requieren precisión técnica.
-
----
-
-[← Prompt 1](prompt-01.md) | [Prompt 3 →](prompt-03.md)
+Respondió con un ejemplo muy breve y superficial. Fabricó un enlace de imagen que no existe (alucinación). Evidencia clara de las limitaciones de los modelos de 1B para tareas que requieren precisión técnica.
