@@ -63,13 +63,13 @@ Es la variante optimizada para velocidad del modelo large-v3. Mantiene precisió
 
 | Modelo | Fabricante | Generación de JSON | Velocidad | Tamaño | Licencia | Seleccionado |
 |---|---|---|---|---|---|---|
-| phi3.5:latest | Microsoft | Alta | Alta (~30 tok/s) | 2.2 GB | MIT | ✓ |
-| gemma3:4b | Google DeepMind | Media-alta | Alta (~21 tok/s) | 3.3 GB | Gemma License | — |
-| qwen2.5:7b | Alibaba Cloud | Muy alta | Media (~12 tok/s) | 4.7 GB | Apache 2.0 | — |
+| `gemma3:4b` | Google DeepMind | Muy alta | Alta (~21 tok/s) | 3.3 GB | Gemma License | ✓ |
+| `phi3.5:latest` | Microsoft | Media | Alta (~31 tok/s) | 2.2 GB | MIT | — |
+| `qwen2.5:7b` | Alibaba Cloud | Muy alta | Media (~12 tok/s) | 4.7 GB | Apache 2.0 | — |
 
-**Modelo seleccionado: `phi3.5:latest`**
+**Modelo seleccionado: `gemma3:4b`**
 
-El benchmark de la Parte B confirmó que phi3.5 tiene el mejor balance entre velocidad (30.8 tok/s promedio) y capacidad de generar JSON válido. Su licencia MIT es la más permisiva del grupo, lo que lo hace adecuado para el proyecto.
+El benchmark de la Parte B confirmó que gemma3:4b obtuvo calidad perfecta (10/10) en todos los ciclos: siempre generó JSON válido con los cuatro campos requeridos sin texto adicional. Su tiempo promedio de 2.69 s fue el más bajo del grupo y sus respuestas son consistentes en longitud (desviación estándar de apenas 0.27 tokens de salida). Para un sistema en tiempo real donde la salida debe ser JSON parseable de forma confiable, la consistencia de gemma3:4b es más valiosa que la velocidad en tokens/s de phi3.5.
 
 ---
 
@@ -88,5 +88,5 @@ El benchmark de la Parte B confirmó que phi3.5 tiene el mejor balance entre vel
 | Componente | Modelo seleccionado | Ejecución |
 |---|---|---|
 | STT | `openai/whisper-large-v3-turbo` | GPU local |
-| LLM | `phi3.5:latest` | GPU local (Ollama) |
+| LLM | `gemma3:4b` | GPU local (Ollama) |
 | Generador de imagen | *(por definir)* | GPU local |
