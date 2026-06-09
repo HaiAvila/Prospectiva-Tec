@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="brand-name">Sage</span>
+        </div>
+
+        <div class="header-right">
+          <div class="model-pill">
+            <span class="model-dot"></span>
+            <select id="model-select" title="Seleccionar modelo">
+              <option value="gemma3:4b">gemma3:4b</option>
+            </select>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+
+          <button id="new-chat-btn" class="icon-btn" title="Nueva conversación">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Messages -->
+    <main class="messages" id="messages">
+
+      <!-- Welcome screen -->
+      <div class="welcome" id="welcome">
+        <div class="welcome-glyph">
+          <svg viewBox="0 0 40 40" fill="none">
+            <path d="M20 4L4 12l16 8 16-8-16-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M4 28l16 8 16-8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M4 20l16 8 16-8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1>Hola, soy Sage</h1>
+        <p>Un asistente de IA que corre localmente en tu computadora.<br>¿En qué te puedo ayudar hoy?</p>
+        <div class="chips">
+          <button class="chip" data-prompt="Explica qué es un LLM en máximo 100 palabras, de forma clara y concisa.">¿Qué es un LLM?</button>
+          <button class="chip" data-prompt="Explica la diferencia entre inteligencia artificial, aprendizaje automático, IA generativa y LLM para estudiantes universitarios. Responde en español, con tono académico y máximo 200 palabras.">IA · ML · LLM</button>
+          <button class="chip" data-prompt="Dame un ejemplo sencillo de uso de embeddings en una búsqueda semántica dentro de un repositorio de documentos académicos.">Embeddings</button>
+          <button class="chip" data-prompt="Menciona tres riesgos académicos de usar LLM sin verificar fuentes. Incluye un ejemplo breve para cada riesgo.">Riesgos académicos</button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Composer -->
+    <footer class="composer-wrap">
+      <div class="composer" id="composer">
+        <textarea
+          id="user-input"
+          placeholder="Escribe tu mensaje…"
+          rows="1"
+          maxlength="4000"
+        ></textarea>
+        <button id="send-btn" disabled>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </div>
+      <p class="hint">
+        <span id="status-indicator" class="status-indicator"></span>
+        Sage · Ollama local · <span id="hint-model">gemma3:4b</span>
+      </p>
+    </footer>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
