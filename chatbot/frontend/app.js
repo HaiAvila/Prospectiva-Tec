@@ -269,9 +269,3 @@ sendBtn.addEventListener('click', sendMessage);
 /* ── Init ─────────────────────────────────────────── */
 loadModels();
 inputEl.focus();
-
-// Fix status text node
-const footerNote = document.getElementById('status-note');
-footerNote.innerHTML = 'Sage · Ollama local · <span id="status-indicator">●</span> listo';
-// Re-bind after innerHTML swap
-const si = document.getElementById('status-indicator');
