@@ -20,10 +20,6 @@ Instalación de Ollama, ejecución de seis modelos LLM con cuatro prompts de pru
 
 Matriz de decisión para el proyecto integrador, benchmark de tres modelos LLM con 100 ciclos cada uno, y análisis del efecto de parámetros de inferencia sobre calidad y latencia.
 
----
+### [Práctica 3 — Implementación de chatbot web con LLM local](practica-03.md)
 
-## Proyecto
-
-### [Sage — Chatbot LLM local](chatbot-sage.md)
-
-Chatbot conversacional con historial de mensajes, streaming de respuestas y soporte multimodelo, construido sobre Ollama con backend FastAPI y frontend web.
+Chatbot web completo con backend FastAPI y frontend HTML/CSS/JS. Incluye panel de controles de parámetros del modelo y visualización en tiempo real de 8 métricas de inferencia de Ollama.

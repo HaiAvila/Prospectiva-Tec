@@ -1,3 +1,33 @@
+---
+layout: default
+title: Código del backend
+parent: Práctica 3
+nav_order: 1
+---
+
+# Código del backend
+
+El backend está implementado en **Python** con el framework **FastAPI**. Se conecta a Ollama directamente mediante HTTP (`requests`) con `stream: false` para obtener la respuesta completa junto con todas las métricas de inferencia en un solo objeto JSON.
+
+---
+
+## Estructura del endpoint `/chat`
+
+```
+POST /chat
+├── Valida parámetros con Pydantic Field (rangos estrictos)
+├── Construye el payload para Ollama /api/chat
+├── Mide wall_time con time.perf_counter()
+├── Llama a http://localhost:11434/api/chat (stream: false)
+├── Extrae métricas del JSON de respuesta
+└── Retorna ChatResponse {model, reply, metrics}
+```
+
+---
+
+## `chatbot/backend/main.py`
+
+```python
 import time
 import requests
 from fastapi import FastAPI, HTTPException
@@ -136,3 +166,49 @@ def chat(req: ChatRequest):
             tokens_per_second= round(tokens_per_second,  2),
         ),
     )
+```
+
+---
+
+## `chatbot/backend/requirements.txt`
+
+```
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+requests==2.32.3
+python-dotenv==1.0.1
+```
+
+---
+
+## Endpoints disponibles
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/` | Mensaje de bienvenida y enlaces útiles |
+| `GET` | `/health` | Estado de conexión con Ollama |
+| `GET` | `/models` | Lista de modelos instalados en Ollama |
+| `POST` | `/chat` | Chat con un mensaje, retorna respuesta + métricas |
+
+---
+
+## Modelo de respuesta `/chat`
+
+```json
+{
+  "model": "gemma3:4b",
+  "reply": "Un LLM (Large Language Model) es...",
+  "metrics": {
+    "wall_time_s": 5.8913,
+    "total_duration_s": 3.8046,
+    "load_duration_s": 0.1957,
+    "prompt_eval_count": 37,
+    "eval_count": 80,
+    "total_tokens": 117,
+    "eval_duration_s": 2.4551,
+    "tokens_per_second": 32.59
+  }
+}
+```
+
+> Los tiempos de Ollama (`total_duration`, `load_duration`, `eval_duration`) se obtienen del JSON de respuesta en nanosegundos y se dividen entre `1e9` para convertirlos a segundos. `tokens_per_second` se calcula como `eval_count / eval_duration_s`.

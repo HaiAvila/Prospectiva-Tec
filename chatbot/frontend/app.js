@@ -1,182 +1,277 @@
 const API = 'http://localhost:8000';
 
+/* ── DOM refs ─────────────────────────────────────── */
 const messagesEl  = document.getElementById('messages');
-const inputEl     = document.getElementById('user-input');
-const sendBtn     = document.getElementById('send-btn');
-const modelSelect = document.getElementById('model-select');
-const hintModel   = document.getElementById('hint-model');
-const newChatBtn  = document.getElementById('new-chat-btn');
-const statusEl    = document.getElementById('status-indicator');
 const welcomeEl   = document.getElementById('welcome');
+const inputEl     = document.getElementById('input');
+const sendBtn     = document.getElementById('send');
+const newChatBtn  = document.getElementById('new-chat');
+const statusNote  = document.getElementById('status-indicator');
+const headerModel = document.getElementById('header-model');
 
-let history   = [];
-let streaming = false;
+// Settings
+const openSettings  = document.getElementById('open-settings');
+const closeSettings = document.getElementById('close-settings');
+const panel         = document.getElementById('settings-panel');
+const overlay       = document.getElementById('settings-overlay');
 
-// ── Health ────────────────────────────────────────────────────────────────────
-async function checkHealth() {
-  try {
-    const res  = await fetch(`${API}/api/health`);
-    const data = await res.json();
-    if (data.status === 'ok') {
-      statusEl.className = 'status-indicator ok';
-    } else throw new Error();
-  } catch {
-    statusEl.className = 'status-indicator err';
-  }
-}
+// Parameter controls
+const modelSelect    = document.getElementById('model-select');
+const tempSlider     = document.getElementById('temperature');
+const tempVal        = document.getElementById('temp-val');
+const toppSlider     = document.getElementById('top_p');
+const toppVal        = document.getElementById('topp-val');
+const predictSlider  = document.getElementById('num_predict');
+const predictVal     = document.getElementById('predict-val');
+const ctxSelect      = document.getElementById('num_ctx');
+const penaltySlider  = document.getElementById('repeat_penalty');
+const penaltyVal     = document.getElementById('penalty-val');
+const systemPrompt   = document.getElementById('system_prompt');
 
-// ── Models ────────────────────────────────────────────────────────────────────
+/* ── Marked config ────────────────────────────────── */
+marked.setOptions({ breaks: true, gfm: true });
+
+/* ── Load models ──────────────────────────────────── */
 async function loadModels() {
   try {
-    const res      = await fetch(`${API}/api/models`);
-    const { models } = await res.json();
-    modelSelect.innerHTML = models
-      .map(m => `<option value="${m}">${m}</option>`)
-      .join('');
-    syncModel();
-  } catch { /* keep default */ }
+    const r    = await fetch(`${API}/models`);
+    const data = await r.json();
+    const models = data.models || [];
+    if (!models.length) return;
+
+    modelSelect.innerHTML = '';
+    models.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m;
+      if (m.startsWith('gemma3:4b')) opt.selected = true;
+      modelSelect.appendChild(opt);
+    });
+    syncModelPill();
+  } catch (_) { /* Ollama may not be running yet */ }
 }
 
-function syncModel() {
-  hintModel.textContent = modelSelect.value;
+function syncModelPill() {
+  const m = modelSelect.value;
+  headerModel.textContent = m;
 }
-modelSelect.addEventListener('change', syncModel);
 
-// ── Textarea auto-resize ──────────────────────────────────────────────────────
+/* ── Slider live values ───────────────────────────── */
+tempSlider.addEventListener('input',    () => { tempVal.textContent    = parseFloat(tempSlider.value).toFixed(2); });
+toppSlider.addEventListener('input',    () => { toppVal.textContent    = parseFloat(toppSlider.value).toFixed(2); });
+predictSlider.addEventListener('input', () => { predictVal.textContent = predictSlider.value; });
+penaltySlider.addEventListener('input', () => { penaltyVal.textContent = parseFloat(penaltySlider.value).toFixed(2); });
+modelSelect.addEventListener('change',  syncModelPill);
+
+/* ── Settings panel toggle ────────────────────────── */
+openSettings.addEventListener('click', () => {
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('active');
+});
+
+function closePanel() {
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden', 'true');
+  overlay.classList.remove('active');
+}
+closeSettings.addEventListener('click', closePanel);
+overlay.addEventListener('click', closePanel);
+
+/* ── Textarea auto-resize ─────────────────────────── */
 inputEl.addEventListener('input', () => {
   inputEl.style.height = 'auto';
-  inputEl.style.height = Math.min(inputEl.scrollHeight, 160) + 'px';
-  sendBtn.disabled = !inputEl.value.trim() || streaming;
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
 });
 
 inputEl.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 
-sendBtn.addEventListener('click', sendMessage);
-
-// ── Chips ─────────────────────────────────────────────────────────────────────
-document.querySelectorAll('.chip').forEach(c =>
-  c.addEventListener('click', () => {
-    inputEl.value = c.dataset.prompt;
+/* ── Chips ────────────────────────────────────────── */
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    inputEl.value = chip.textContent;
     inputEl.dispatchEvent(new Event('input'));
     sendMessage();
-  })
-);
-
-// ── New conversation ──────────────────────────────────────────────────────────
-newChatBtn.addEventListener('click', () => {
-  history = [];
-  messagesEl.innerHTML = '';
-  welcomeEl.style.display = '';
-  messagesEl.appendChild(welcomeEl);
-  inputEl.value = '';
-  inputEl.style.height = 'auto';
-  sendBtn.disabled = true;
+  });
 });
 
-// ── Render helpers ────────────────────────────────────────────────────────────
-function md(text) {
-  return marked.parse(text, { breaks: true, gfm: true });
+/* ── New chat ─────────────────────────────────────── */
+newChatBtn.addEventListener('click', () => {
+  messagesEl.innerHTML = '';
+  messagesEl.appendChild(welcomeEl);
+  welcomeEl.style.display = '';
+  inputEl.value = '';
+  setStatus('ready');
+});
+
+/* ── Helpers ──────────────────────────────────────── */
+function setStatus(state) {
+  if (state === 'ready') {
+    statusNote.textContent = '●';
+    statusNote.className   = '';
+    statusNote.nextSibling.textContent = ' listo';
+  } else if (state === 'loading') {
+    statusNote.textContent = '●';
+    statusNote.className   = 'loading';
+    statusNote.nextSibling.textContent = ' generando…';
+  } else if (state === 'error') {
+    statusNote.textContent = '●';
+    statusNote.className   = 'error';
+    statusNote.nextSibling.textContent = ' error';
+  }
 }
 
 function scrollBottom() {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-function addRow(role, html = '') {
-  if (welcomeEl.parentNode) welcomeEl.style.display = 'none';
+function appendUserBubble(text) {
+  welcomeEl.style.display = 'none';
 
-  const row    = document.createElement('div');
-  row.className = `row ${role}`;
-
-  const av     = document.createElement('div');
-  av.className = 'av';
-  av.textContent = role === 'user' ? 'Tú' : 'S';
-
-  const bubble  = document.createElement('div');
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  const bubble = document.createElement('div');
   bubble.className = 'bubble';
-  if (html) bubble.innerHTML = html;
-
-  row.appendChild(av);
+  bubble.textContent = text;
   row.appendChild(bubble);
   messagesEl.appendChild(row);
   scrollBottom();
-  return bubble;
+  return row;
 }
 
-// ── Send ──────────────────────────────────────────────────────────────────────
+function appendAssistantRow() {
+  const row = document.createElement('div');
+  row.className = 'msg-row assistant';
+
+  // Loading bubble
+  const loading = document.createElement('div');
+  loading.className = 'bubble loading-bubble';
+  loading.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  row.appendChild(loading);
+
+  messagesEl.appendChild(row);
+  scrollBottom();
+  return { row, loading };
+}
+
+function renderAssistantContent(row, loading, reply, metrics) {
+  row.removeChild(loading);
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = marked.parse(reply);
+  row.appendChild(bubble);
+
+  if (metrics) {
+    const panel = buildMetrics(metrics);
+    row.appendChild(panel);
+  }
+  scrollBottom();
+}
+
+/* ── Metrics panel ────────────────────────────────── */
+const METRIC_DEFS = [
+  { key: 'wall_time_s',       label: 'Tiempo backend', fmt: v => v.toFixed(3) + ' s', highlight: false },
+  { key: 'total_duration_s',  label: 'Tiempo Ollama',  fmt: v => v.toFixed(3) + ' s', highlight: false },
+  { key: 'load_duration_s',   label: 'Carga modelo',   fmt: v => v.toFixed(3) + ' s', highlight: false },
+  { key: 'eval_duration_s',   label: 'Generación',     fmt: v => v.toFixed(3) + ' s', highlight: false },
+  { key: 'prompt_eval_count', label: 'Tokens entrada', fmt: v => v,                   highlight: false },
+  { key: 'eval_count',        label: 'Tokens salida',  fmt: v => v,                   highlight: false },
+  { key: 'total_tokens',      label: 'Tokens totales', fmt: v => v,                   highlight: false },
+  { key: 'tokens_per_second', label: 'Tokens/s',       fmt: v => v.toFixed(1),        highlight: true  },
+];
+
+function buildMetrics(m) {
+  const panel = document.createElement('div');
+  panel.className = 'metrics-panel';
+
+  METRIC_DEFS.forEach(def => {
+    const card = document.createElement('div');
+    card.className = 'metric-card' + (def.highlight ? ' highlight' : '');
+
+    const label = document.createElement('div');
+    label.className = 'metric-label';
+    label.textContent = def.label;
+
+    const value = document.createElement('div');
+    value.className = 'metric-value';
+    value.textContent = def.fmt(m[def.key]);
+
+    card.appendChild(label);
+    card.appendChild(value);
+    panel.appendChild(card);
+  });
+
+  return panel;
+}
+
+/* ── Send message ─────────────────────────────────── */
 async function sendMessage() {
   const text = inputEl.value.trim();
-  if (!text || streaming) return;
+  if (!text || sendBtn.disabled) return;
 
-  streaming = true;
-  sendBtn.disabled = true;
-  inputEl.value = '';
-  inputEl.style.height = 'auto';
+  // UI lock
+  sendBtn.disabled      = true;
+  inputEl.disabled      = true;
+  inputEl.style.height  = 'auto';
+  inputEl.value         = '';
+  setStatus('loading');
 
-  history.push({ role: 'user', content: text });
-  addRow('user', md(text));
+  appendUserBubble(text);
+  const { row, loading } = appendAssistantRow();
 
-  const bubble = addRow('assistant');
-  const cursor = document.createElement('span');
-  cursor.className = 'cursor';
-  bubble.appendChild(cursor);
-  scrollBottom();
-
-  let accumulated = '';
+  const payload = {
+    message:        text,
+    model:          modelSelect.value,
+    temperature:    parseFloat(tempSlider.value),
+    top_p:          parseFloat(toppSlider.value),
+    num_predict:    parseInt(predictSlider.value),
+    num_ctx:        parseInt(ctxSelect.value),
+    repeat_penalty: parseFloat(penaltySlider.value),
+    system_prompt:  systemPrompt.value.trim(),
+  };
 
   try {
-    const res = await fetch(`${API}/api/conversation`, {
-      method: 'POST',
+    const res = await fetch(`${API}/chat`, {
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history, model: modelSelect.value, stream: true }),
+      body:    JSON.stringify(payload),
     });
 
-    if (!res.ok) throw new Error(`Error del servidor (${res.status})`);
-
-    const reader  = res.body.getReader();
-    const decoder = new TextDecoder();
-    let   buffer  = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
-
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const payload = line.slice(6).trim();
-        if (payload === '[DONE]') continue;
-        try {
-          const { content, error } = JSON.parse(payload);
-          if (error) throw new Error(error);
-          if (content) {
-            accumulated += content;
-            bubble.innerHTML = md(accumulated);
-            bubble.appendChild(cursor);
-            scrollBottom();
-          }
-        } catch { /* skip malformed */ }
-      }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: res.statusText }));
+      throw new Error(err.detail || res.statusText);
     }
+
+    const data = await res.json();
+    renderAssistantContent(row, loading, data.reply, data.metrics);
+    setStatus('ready');
+
   } catch (err) {
-    bubble.innerHTML = `<span style="color:#f87171;font-size:.9rem">${err.message}</span>`;
+    row.removeChild(loading);
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.style.color = '#ef4444';
+    bubble.textContent = `Error: ${err.message}`;
+    row.appendChild(bubble);
+    setStatus('error');
   } finally {
-    cursor.remove();
-    if (accumulated) {
-      bubble.innerHTML = md(accumulated);
-      history.push({ role: 'assistant', content: accumulated });
-    }
-    streaming = false;
-    sendBtn.disabled = !inputEl.value.trim();
-    scrollBottom();
+    sendBtn.disabled   = false;
+    inputEl.disabled   = false;
+    inputEl.focus();
   }
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-checkHealth();
+sendBtn.addEventListener('click', sendMessage);
+
+/* ── Init ─────────────────────────────────────────── */
 loadModels();
+inputEl.focus();
+
+// Fix status text node
+const footerNote = document.getElementById('status-note');
+footerNote.innerHTML = 'Sage · Ollama local · <span id="status-indicator">●</span> listo';
+// Re-bind after innerHTML swap
+const si = document.getElementById('status-indicator');
