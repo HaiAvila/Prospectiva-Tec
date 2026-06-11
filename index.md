@@ -23,3 +23,7 @@ Matriz de decisión para el proyecto integrador, benchmark de tres modelos LLM c
 ### [Práctica 3 — Implementación de chatbot web con LLM local](practica-03.md)
 
 Chatbot web completo con backend FastAPI y frontend HTML/CSS/JS. Incluye panel de controles de parámetros del modelo y visualización en tiempo real de 8 métricas de inferencia de Ollama.
+
+### [Práctica 4 — Diseño de un copiloto especializado](practica-04.md)
+
+Extensión del chatbot de la Práctica 3 para convertirlo en un copiloto especializado. Implementa cuatro perfiles con system prompts diseñados por dominio (asistente genérico, robótica, docente e investigación), historial de conversación multi-turno, endpoint `/profiles` y comparación sistemática entre respuestas genéricas y especializadas.
