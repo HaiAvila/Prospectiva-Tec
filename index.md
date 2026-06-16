@@ -27,3 +27,7 @@ Chatbot web completo con backend FastAPI y frontend HTML/CSS/JS. Incluye panel d
 ### [Práctica 4 — Diseño de un copiloto especializado](practica-04.md)
 
 Extensión del chatbot de la Práctica 3 para convertirlo en un copiloto especializado. Implementa cuatro perfiles con system prompts diseñados por dominio (asistente genérico, robótica, docente e investigación), historial de conversación multi-turno, endpoint `/profiles` y comparación sistemática entre respuestas genéricas y especializadas.
+
+### [Práctica 5 — Chatbot híbrido con APIs externas](practica-05.md)
+
+Extensión del copiloto de la Práctica 4 para soportar tres proveedores: Ollama local (`llama3.2:3b`), Gemini API (`gemini-2.5-flash`) y Groq API (`llama-3.3-70b-versatile`). Incluye selector de proveedor, campo de API key, métricas unificadas y comparación cuantitativa y cualitativa del mismo prompt en los tres proveedores.
