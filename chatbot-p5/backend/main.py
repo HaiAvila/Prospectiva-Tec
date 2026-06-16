@@ -334,6 +334,7 @@ def _chat_gemini(req: ChatRequest) -> ChatResponse:
             "temperature":     req.temperature,
             "topP":            req.top_p,
             "maxOutputTokens": req.max_tokens,
+            "thinkingConfig":  {"thinkingBudget": 0},
         },
     }
 

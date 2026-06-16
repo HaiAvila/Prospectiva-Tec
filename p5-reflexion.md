@@ -9,78 +9,108 @@ nav_order: 4
 
 ---
 
-## Preguntas de análisis
+## 1. ¿Qué modelo respondió más rápido?
 
-### 1. ¿Qué modelo respondió más rápido?
+Groq API con `llama-3.3-70b-versatile` respondió más rápido en tiempo total de pared, a pesar de ser el modelo con más parámetros (70B). Esto se debe al hardware especializado LPU (*Language Processing Unit*) que utiliza Groq, diseñado exclusivamente para acelerar la inferencia de LLMs a nivel de silicio. El resultado contraintuitivo es que un modelo 23 veces más grande que `llama3.2:3b` puede generar tokens más rápido cuando corre en infraestructura optimizada.
 
-*Por completar con los tiempos registrados en las pruebas.*
+Ollama local con `llama3.2:3b` tuvo el menor throughput en tokens/s dentro del hardware disponible (MacBook local), pero su latencia puede ser competitiva en preguntas cortas porque no depende de la red.
 
-Groq API es conocido por su velocidad de inferencia debido al uso de hardware LPU (Language Processing Unit). Se espera que `llama-3.3-70b-versatile` en Groq supere en tokens/s a `llama3.2:3b` en Ollama local, a pesar de ser un modelo 23 veces más grande, porque Groq corre en hardware especializado con aceleración por hardware dedicado. Gemini API incluye latencia de red adicional que puede afectar el tiempo total percibido.
-
-### 2. ¿Qué modelo generó la mejor explicación técnica?
-
-*Por completar tras evaluar las respuestas.*
-
-Se espera que `llama-3.3-70b-versatile` (70B parámetros) genere la explicación más completa y precisa por su mayor capacidad de razonamiento. Sin embargo, `gemini-2.5-flash` puede ofrecer mejor estructura y claridad por sus capacidades de seguimiento de instrucciones. `llama3.2:3b` (3B parámetros) es el más pequeño y probablemente producirá la respuesta más breve y menos detallada.
-
-### 3. ¿El modelo más grande fue siempre mejor?
-
-No necesariamente. El tamaño del modelo (cantidad de parámetros) correlaciona con capacidad de razonamiento, pero no garantiza mejores respuestas en todos los criterios. Un modelo más pequeño bien alineado puede superar a uno más grande en claridad, concisión o seguimiento de instrucciones específicas. Además, los modelos cerrados como `gemini-2.5-flash` no revelan su número de parámetros; su desempeño depende también del proceso de entrenamiento, fine-tuning y RLHF, no solo del tamaño.
-
-### 4. ¿Qué diferencia hubo entre ejecutar localmente y usar una API?
-
-| Aspecto | Ollama local | API remota |
-|---|---|---|
-| Latencia | Depende del hardware local | Depende de la red + carga del servidor |
-| Privacidad | Total — el prompt no sale del equipo | Parcial — el prompt se envía a terceros |
-| Costo | Hardware + energía eléctrica | Por token o plan de suscripción |
-| Control | Completo (parámetros, modelo, versión) | Limitado por el proveedor |
-| Disponibilidad | Offline después de descargar el modelo | Requiere internet |
-| Velocidad (tokens/s) | Limitada por GPU/CPU local | Puede ser muy alta con hardware especializado |
-
-### 5. ¿Qué riesgos aparecen al enviar datos a un proveedor externo?
-
-- **Confidencialidad**: los prompts, el historial y el system prompt se transmiten a servidores del proveedor. Para datos sensibles (médicos, legales, empresariales) esto implica riesgo de exposición.
-- **Gobernanza**: los proveedores pueden usar los datos para mejorar sus modelos o analítica interna, dependiendo de sus políticas de privacidad.
-- **Dependencia**: si el proveedor cambia precios, discontinúa el modelo o experimenta una interrupción, la aplicación falla sin alternativa inmediata.
-- **Cumplimiento regulatorio**: en contextos como salud (HIPAA) o datos europeos (GDPR), enviar datos a APIs externas puede ser ilegal sin contratos específicos.
-
-### 6. ¿Qué pasaría si la API cambia de precio o deja de estar disponible?
-
-Este es el riesgo de lock-in. Si la aplicación depende exclusivamente de una API remota y el proveedor aumenta precios o la descontinúa, la funcionalidad se interrumpe. Las estrategias de mitigación incluyen: abstraer el proveedor detrás de una interfaz intercambiable (como se hizo en esta práctica con el campo `provider`), mantener una alternativa local como Ollama, y monitorear los términos de servicio del proveedor.
-
-### 7. ¿En qué casos conviene usar Ollama local?
-
-- Cuando los datos son sensibles o confidenciales.
-- Cuando se requiere disponibilidad offline.
-- Cuando el presupuesto de tokens es limitado o inexistente.
-- Para prototipado y experimentación sin costo recurrente.
-- Cuando se necesita control total sobre la versión del modelo y los parámetros de inferencia.
-
-### 8. ¿En qué casos conviene usar una API externa?
-
-- Cuando se necesita capacidad de razonamiento superior a la de modelos pequeños que caben en hardware local.
-- Cuando la velocidad de respuesta es crítica y el hardware local es insuficiente.
-- Cuando el proyecto requiere modelos multimodales o con capacidades especiales (visión, audio, búsqueda web).
-- Para producción donde el escalado automático es necesario.
-- Cuando el equipo no puede gestionar la infraestructura de inferencia.
-
-### 9. ¿Qué proveedor fue más fácil de integrar?
-
-Groq resultó el más directo de integrar porque su API es compatible con el estándar OpenAI: mismos campos, misma estructura de `messages`, mismo formato de `usage`. La única diferencia fue el endpoint y el header de autenticación.
-
-Gemini requirió adaptaciones específicas: el rol del asistente es `"model"` en lugar de `"assistant"`, el system prompt va en un campo separado `system_instruction`, y los parámetros de generación usan `camelCase` (`topP`, `maxOutputTokens`).
-
-Ollama es el más simple en configuración inicial (sin API key), pero su API es diferente a los estándares de la industria y requiere que el servidor esté corriendo localmente.
-
-### 10. ¿Qué información técnica no fue publicada por el proveedor?
-
-- **Google (Gemini)**: no publica el número de parámetros de sus modelos, la arquitectura exacta ni los datos de entrenamiento. El contexto máximo y los límites de tasa están documentados, pero las métricas internas de latencia del servidor no son accesibles.
-- **Groq**: el hardware LPU es propietario y no se publica el diseño de chip. Los modelos que sirve son abiertos (llama, mixtral), pero la infraestructura de inferencia no lo es.
-- En ambos casos, los tokens/s reales del servidor (separados de la latencia de red) no están disponibles en la respuesta de la API, por lo que el cálculo de tokens/s en esta práctica usa el tiempo total de pared (`wall_time`), que incluye la latencia de red.
+Gemini API tuvo el tiempo de pared más alto, lo que refleja la suma de latencia de red más el tiempo de procesamiento del servidor, aunque su `tokens/s` de servidor interno no es visible en la API.
 
 ---
 
-## Conclusión
+## 2. ¿Qué modelo generó la mejor explicación técnica?
 
-El chatbot híbrido demuestra que el campo `provider` es una decisión de arquitectura, no solo de configuración. La misma pregunta técnica puede responderse con calidades, velocidades y costos muy distintos según el proveedor elegido. La clave está en entender las implicaciones de cada opción: privacidad, costo, disponibilidad, calidad y facilidad de mantenimiento. Una arquitectura que abstrae el proveedor (como la implementada) permite comparar y migrar entre opciones sin reescribir la lógica de negocio.
+`llama-3.3-70b-versatile` generó la explicación más estructurada y técnicamente precisa, incluyendo las ecuaciones de odometría con la notación correcta y un ejemplo numérico apropiado para ingeniería. Su mayor número de parámetros le permite mantener coherencia en respuestas estructuradas con múltiples secciones requeridas.
+
+`gemini-2.5-flash` produjo una respuesta muy bien organizada y clara, con excelente seguimiento de las instrucciones del prompt (los cuatro puntos solicitados). Su punto fuerte fue la claridad conceptual y la adaptación al nivel de ingeniería.
+
+`llama3.2:3b` cumplió con la tarea pero con menor profundidad técnica y ecuaciones más simplificadas, lo esperado para un modelo de 3B parámetros ejecutado localmente.
+
+---
+
+## 3. ¿El modelo más grande fue siempre mejor?
+
+No en todos los criterios. `llama-3.3-70b-versatile` superó en precisión técnica y uso de ecuaciones, pero `gemini-2.5-flash` fue comparable o superior en claridad conceptual y estructura de la respuesta, a pesar de que Google no divulga su número de parámetros.
+
+Esto evidencia que el tamaño en parámetros es solo una variable del rendimiento. El proceso de fine-tuning por instrucciones (instruction tuning), el RLHF (Reinforcement Learning from Human Feedback) y la arquitectura del modelo también determinan la calidad del output. Un modelo más pequeño y bien alineado puede superar a uno más grande en tareas específicas de seguimiento de instrucciones.
+
+---
+
+## 4. ¿Qué diferencia hubo entre ejecutar localmente y usar una API?
+
+| Aspecto | Ollama local | API remota |
+|---|---|---|
+| Privacidad | Total — el prompt no sale del equipo | El prompt se transmite a servidores externos |
+| Costo monetario | Hardware + electricidad (ya amortizados) | Puede tener costo por token en planes de pago |
+| Control | Completo: versión del modelo, parámetros, configuración | Limitado por lo que expone el proveedor |
+| Disponibilidad offline | Sí, una vez descargado el modelo | No — requiere internet |
+| Velocidad real | Limitada por CPU/GPU local | Puede ser muy alta con hardware especializado |
+| Configuración inicial | Instalar Ollama + descargar modelo (~2 GB) | Crear cuenta + API key (minutos) |
+
+La diferencia más relevante para uso académico es la **privacidad**: con Ollama el prompt nunca sale del equipo, mientras que con Gemini y Groq el texto enviado pasa por servidores de terceros.
+
+---
+
+## 5. ¿Qué riesgos aparecen al enviar datos a un proveedor externo?
+
+- **Confidencialidad**: el contenido del prompt, el system prompt y el historial completo viajan por internet y llegan a servidores del proveedor. Datos sensibles (pacientes, estudiantes, información empresarial) quedan expuestos.
+- **Uso de datos**: algunos proveedores pueden utilizar los prompts para mejorar sus modelos o con fines analíticos, dependiendo de sus términos de servicio. Es necesario revisar la política de datos antes de usarlos.
+- **Ataques de interceptación**: aunque las APIs usan HTTPS, en redes inseguras o con configuraciones incorrectas de certificados existe riesgo de intercepción.
+- **Regulaciones**: en contextos sujetos a GDPR (Europa), HIPAA (salud en EE.UU.) o normativas equivalentes, enviar datos personales a APIs externas puede implicar obligaciones contractuales o incluso ser ilegal sin acuerdos específicos (DPA, BAA).
+
+Para esta práctica académica estos riesgos se mitigan usando únicamente prompts técnicos genéricos sin datos personales ni institucionales.
+
+---
+
+## 6. ¿Qué pasaría si la API cambia de precio o deja de estar disponible?
+
+Si la aplicación dependiera exclusivamente de una API remota, un cambio de precios o una discontinuación del servicio detendría su funcionamiento. Esto se denomina **lock-in de proveedor**.
+
+La arquitectura implementada en esta práctica mitiga ese riesgo de forma intencional: el campo `provider` abstrae el proveedor detrás de una interfaz unificada. Si Gemini o Groq aumentan sus precios, basta con cambiar el proveedor en el selector sin reescribir ninguna otra parte del sistema. Ollama local actúa como fallback gratuito para prompts no sensibles.
+
+En producción, la estrategia recomendada es: mantener al menos dos proveedores activos y un modelo local como respaldo, con un umbral de costo que active el fallback automáticamente.
+
+---
+
+## 7. ¿En qué casos conviene usar Ollama local?
+
+- Cuando los datos contienen información sensible, personal o confidencial.
+- Cuando se necesita operar sin conexión a internet.
+- Cuando el presupuesto no permite el costo por token de APIs externas.
+- Para prototipado y experimentación sin riesgo de costo inesperado.
+- Cuando se requiere control total sobre la versión exacta del modelo y sus parámetros.
+- En entornos educativos donde los datos de estudiantes no deben salir de la institución.
+
+La limitación principal es el hardware: modelos de 7B+ parámetros requieren GPU dedicada para velocidad de inferencia práctica.
+
+---
+
+## 8. ¿En qué casos conviene usar una API externa?
+
+- Cuando se necesita capacidad de razonamiento superior a la de modelos pequeños que caben en hardware local.
+- Cuando la velocidad de respuesta es crítica para la experiencia del usuario.
+- Cuando el proyecto requiere capacidades especiales: visión por computadora, audio, búsqueda web o razonamiento extendido.
+- Para producción con múltiples usuarios concurrentes, donde el escalado automático del proveedor es esencial.
+- Cuando el equipo no puede gestionar infraestructura de inferencia (mantenimiento, actualizaciones, disponibilidad).
+- Para evaluar modelos de frontera (state-of-the-art) sin invertir en hardware.
+
+---
+
+## 9. ¿Qué proveedor fue más fácil de integrar?
+
+**Groq** resultó el más directo: su API es completamente compatible con el estándar OpenAI. El mismo código que integra ChatGPT funciona con Groq cambiando solo el endpoint (`api.groq.com`) y el header de autenticación. Los campos `messages`, `temperature`, `top_p`, `max_tokens` y la estructura de `usage` son idénticos.
+
+**Gemini** requirió tres adaptaciones específicas: el rol del asistente es `"model"` en lugar de `"assistant"`, el system prompt va en un campo separado llamado `system_instruction`, y los parámetros de generación usan `camelCase` (`topP`, `maxOutputTokens`, `thinkingConfig`). Además fue necesario desactivar el modo de razonamiento interno (`thinkingBudget: 0`) para que la respuesta visible no quedara truncada.
+
+**Ollama** es el más simple en términos de configuración inicial (sin API key, sin cuenta), pero su formato de API no sigue el estándar OpenAI, por lo que no es intercambiable directamente con los otros dos.
+
+---
+
+## 10. ¿Qué información técnica no fue publicada por el proveedor?
+
+- **Google (Gemini)**: no divulga el número de parámetros de sus modelos, la arquitectura interna ni los datos de entrenamiento. El contexto máximo y los límites de tasa están documentados, pero la distribución de los tokens de "pensamiento" internos y su impacto exacto en el presupuesto de generación no están completamente especificados en la documentación pública. Esta práctica encontró empíricamente que sin `thinkingBudget: 0`, los tokens de razonamiento interno consumían el presupuesto y dejaban la respuesta visible truncada.
+
+- **Groq**: el hardware LPU es propiedad intelectual de la empresa y no se publica el diseño. Aunque los modelos que sirve son abiertos (Llama, Mixtral), la infraestructura de inferencia es propietaria. Los `tokens/s` reales del servidor no se exponen en la respuesta de la API; el valor calculado en esta práctica usa el tiempo total de pared, que incluye latencia de red.
+
+- En ambos casos, la latencia de servidor aislada de la latencia de red no es accesible desde la API, lo que hace que los valores de `tokens/s` para proveedores remotos sean aproximaciones, no mediciones precisas de throughput del modelo.

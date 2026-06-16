@@ -7,7 +7,7 @@ nav_order: 3
 
 # Pruebas y métricas
 
-Se utilizó el mismo prompt en los tres proveedores para una comparación justa:
+Se utilizó el mismo prompt en los tres proveedores con configuración idéntica:
 
 > **Prompt de prueba:**
 > ```
@@ -20,7 +20,7 @@ Se utilizó el mismo prompt en los tres proveedores para una comparación justa:
 > Responde en máximo 250 palabras.
 > ```
 
-**Configuración aplicada:** temperature = 0.7 · top_p = 0.9 · max_tokens = 300 · Perfil: Copiloto de robótica móvil
+**Configuración:** temperature = 0.7 · top_p = 0.9 · max_tokens = 300 · Perfil: Copiloto de robótica móvil
 
 ---
 
@@ -28,19 +28,19 @@ Se utilizó el mismo prompt en los tres proveedores para una comparación justa:
 
 ### Prueba 1 — Ollama local · `llama3.2:3b`
 
-![Prueba 1 — Ollama](../assets/img/practica5/prueba1-ollama.png)
+![Prueba 1 — Ollama local](../assets/img/practica5/prueba1-ollama.png)
 
 ---
 
 ### Prueba 2 — Gemini API · `gemini-2.5-flash`
 
-![Prueba 2 — Gemini](../assets/img/practica5/prueba2-gemini.png)
+![Prueba 2 — Gemini API](../assets/img/practica5/prueba2-gemini.png)
 
 ---
 
 ### Prueba 3 — Groq API · `llama-3.3-70b-versatile`
 
-![Prueba 3 — Groq](../assets/img/practica5/prueba3-groq.png)
+![Prueba 3 — Groq API](../assets/img/practica5/prueba3-groq.png)
 
 ---
 
@@ -52,11 +52,11 @@ Se utilizó el mismo prompt en los tres proveedores para una comparación justa:
 | Modelo | `llama3.2:3b` | `gemini-2.5-flash` | `llama-3.3-70b-versatile` |
 | Tipo | Abierto / local | Cerrado / remoto | Abierto / remoto |
 | Parámetros | 3B aprox. | No divulgado | 70B |
-| Contexto máximo | 128 K tokens | 1 M tokens | 128 K tokens |
+| Contexto máximo | 128 000 tokens | 1 048 576 tokens | 128 000 tokens |
 | Tokens entrada | — | — | — |
 | Tokens salida | — | — | — |
 | Tokens totales | — | — | — |
-| Tiempo total (s) | — | — | — |
+| Tiempo total | — | — | — |
 | Tokens/s | — | — | — |
 | ¿Requiere internet? | No | Sí | Sí |
 | ¿Requiere API key? | No | Sí | Sí |
@@ -64,7 +64,7 @@ Se utilizó el mismo prompt en los tres proveedores para una comparación justa:
 | Privacidad | Alta | Depende del proveedor | Depende del proveedor |
 | Facilidad de integración | Media | Alta | Alta |
 
-*Las celdas con "—" se completarán con los valores registrados durante las pruebas.*
+*Completar los valores de tokens y tiempo con los datos observados en las capturas de pantalla.*
 
 ---
 
@@ -83,4 +83,4 @@ Escala: 1 = deficiente · 2 = básico · 3 = aceptable · 4 = bueno · 5 = excel
 | Alucinaciones o errores | — | — | — |
 | Utilidad final | — | — | — |
 
-*Las celdas con "—" se completarán después de ejecutar las pruebas.*
+*Completar con las puntuaciones asignadas tras revisar cada respuesta generada.*
