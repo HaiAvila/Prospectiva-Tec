@@ -53,7 +53,7 @@ Navegador (frontend HTML/JS)
 
 | Proveedor | Tipo | Modelo probado | Requiere API key |
 |---|---|---|---|
-| Ollama | Local / abierto | `llama3.2:3b` | No |
+| Ollama | Local / abierto | `qwen2.5:7b` | No |
 | Gemini API (Google) | Remoto / cerrado | `gemini-2.5-flash` | Sí |
 | Groq API | Remoto / abierto | `llama-3.3-70b-versatile` | Sí |
 

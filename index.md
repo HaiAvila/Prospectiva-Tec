@@ -30,4 +30,4 @@ Extensión del chatbot de la Práctica 3 para convertirlo en un copiloto especia
 
 ### [Práctica 5 — Chatbot híbrido con APIs externas](practica-05.md)
 
-Extensión del copiloto de la Práctica 4 para soportar tres proveedores: Ollama local (`llama3.2:3b`), Gemini API (`gemini-2.5-flash`) y Groq API (`llama-3.3-70b-versatile`). Incluye selector de proveedor, campo de API key, métricas unificadas y comparación cuantitativa y cualitativa del mismo prompt en los tres proveedores.
+Extensión del copiloto de la Práctica 4 para soportar tres proveedores: Ollama local (`qwen2.5:7b`), Gemini API (`gemini-2.5-flash`) y Groq API (`llama-3.3-70b-versatile`). Incluye selector de proveedor, campo de API key, métricas unificadas y comparación cuantitativa y cualitativa del mismo prompt en los tres proveedores.
